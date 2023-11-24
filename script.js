@@ -1,21 +1,37 @@
 //your JS code here. If required.
-const name = document.getElementById('name')
+ const form = document.querySelector('#myForm');
+  const nameInput = document.querySelector('#name');
+  const ageInput = document.querySelector('#age');
+  const btn = document.querySelector('#btn');
 
-form.addEventListener('submit',(e)=>{
-	e.preventDefault()
-console.log(name.value)
-	checkAge(age.value, name.value).then(data=>alert(data))
-							.catch(data=>alert(data))
-})
+  form.addEventListener('submit', (event) => {
+    event.preventDefault(); // Prevent form from submitting normally
 
+    if (nameInput.value === '' || ageInput.value === '') {
+      alert('Please fill out all fields.'); // Show validation error
+      return;
+    }
 
-async function checkAge(age,name){
-	return new Promise((res, rej)=>{
-		if(age>18){
-			setTimeout(()=>res(`Welcome, ${name}. You can vote.`),4000)
-		}
-		else{
-			setTimeout(()=>res(`Oh sorry ${name}. You aren't old enough.`),4000)
-		}
-	})
-}
+    const age = parseInt(ageInput.value);
+
+    // Check if age is above 18 after 4 seconds
+    const promise = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (age >= 18) {
+          resolve();
+        } else {
+          reject();
+        }
+      }, 4000);
+    });
+
+    promise
+      .then(() => {
+        // Show welcome message if age is above 18
+        alert(`Welcome, ${nameInput.value}. You can vote.`);
+      })
+      .catch(() => {
+        // Show rejection message if age is below 18
+        alert(`Oh sorry ${nameInput.value}. You aren't old enough.`);
+      });
+  });
